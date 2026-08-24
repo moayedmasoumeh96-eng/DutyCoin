@@ -51,7 +51,8 @@ async function boost(){
       toast(d.detail||d.error||"Boost unavailable");
     }
   }catch(e){
-    toast(e.message||"Boost unavailable");
+    console.error("BOOST ERROR:", e);
+toast(e.message || "Boost failed");
   }
 }
 function friends(){let me=tg?.initDataUnsafe?.user?.id;let link=me?`https://t.me/DutyCoinBot?start=${me}`:"Open this game inside Telegram";open(`<h2>👥 Friends</h2><p>Invite friends and build your squad.</p><div class=item><b>Your referral link</b><small>${link}</small></div><button class=wide onclick="navigator.clipboard?.writeText('${link}');toast('Copied!')">🔗 COPY LINK</button>`)}
