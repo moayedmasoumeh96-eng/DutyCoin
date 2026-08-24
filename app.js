@@ -24,7 +24,37 @@ $("profile").onclick=()=>open(`<h2>👤 Profile</h2><p>Level ${S.level}<br>Balan
 async function daily(){if(!initData)return toast("Open inside Telegram");try{let r=await fetch(`${API_URL}/api/daily`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({init_data:initData})});let d=await r.json();if(d.ok){S.balance=d.balance;render();toast("+500 DUTY")}else toast(d.message)}catch(e){toast("Server error")}}
 async function ranking(){try{let r=await fetch(`${API_URL}/api/ranking`);let data=await r.json();open("<h2>🏆 Ranking</h2>"+data.map((x,i)=>`<div class=item>#${i+1} <b>${escapeHtml(x.username)}</b><small>${x.balance.toLocaleString()} DUTY</small></div>`).join(""))}catch(e){toast("Ranking unavailable")}}
 async function tasks(){try{let r=await fetch(`${API_URL}/api/tasks`);let data=await r.json();open("<h2>🎯 Tasks</h2>"+data.map(x=>`<div class=item><b>${escapeHtml(x.title)}</b><small>Reward: ${x.reward} DUTY</small></div>`).join(""))}catch(e){toast("Tasks unavailable")}}
-async function boost(){if(!initData)return toast("Open inside Telegram");try{let r=await fetch(`${API_URL}/api/boost`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({init_data:initData})});let d=await r.json();if(!r.ok)throw new Error(d.detail||"Boost failed");S.balance=d.balance;S.tap_power=d.tap_power;render();toast("⚡ Tap Power upgraded!")}catch(e){toast(e.message)}}
+async function boost(){
+  try{
+    if(!initData)return toast("Open inside Telegram");
+
+    const r=await fetch(`${API_URL}/api/boost`,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        init_data:initData,
+        taps:n
+      })
+    });
+
+    const d=await r.json().catch(()=>({}));
+
+    if(!r.ok){
+      throw new Error(d.detail||d.error||"Boost failed");
+    }
+
+    if(d.ok){
+      if(typeof d.balance==="number")s.balance=d.balance;
+      if(typeof d.energy==="number")s.energy=d.energy;
+      render();
+      toast("+500 DUTY");
+    }else{
+      toast(d.detail||d.error||"Boost unavailable");
+    }
+  }catch(e){
+    toast(e.message||"Boost unavailable");
+  }
+}
 function friends(){let me=tg?.initDataUnsafe?.user?.id;let link=me?`https://t.me/DutyCoinBot?start=${me}`:"Open this game inside Telegram";open(`<h2>👥 Friends</h2><p>Invite friends and build your squad.</p><div class=item><b>Your referral link</b><small>${link}</small></div><button class=wide onclick="navigator.clipboard?.writeText('${link}');toast('Copied!')">🔗 COPY LINK</button>`)}
 async function wallet(){open(`<h2>💳 Wallet</h2><p>Enter only your public TON wallet address. Never enter a seed phrase or private key.</p><input id=w type=text placeholder="TON wallet address" style="width:100%;padding:13px;border-radius:12px;border:1px solid #fff2;background:#fff1;color:white"><button class=wide onclick="saveWallet()">SAVE WALLET</button>`)}
 async function saveWallet(){let w=document.getElementById("w").value.trim();if(!w)return toast("Enter a wallet address");try{let r=await fetch(`${API_URL}/api/wallet`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({init_data:initData,wallet:w})});if(!r.ok)throw 0;S.wallet=w;toast("Wallet saved");$("sheet").classList.remove("open")}catch(e){toast("Could not save wallet")}}
