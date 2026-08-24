@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>DUTY</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+<div class="glow a"></div><div class="glow b"></div>
+<main class="app">
+<header><div class="brand"><div class="mark">D</div><div><b>DUTY</b><small>MISSION CONTROL</small></div></div><button id="profile">👤</button></header>
+<section class="hero"><small>CURRENT BALANCE</small><h1 id="balance">0</h1><div>🪙 DUTY</div><span>LEVEL <i id="level">1</i> · TAP POWER +<i id="power">1</i></span></section>
+<section class="tap"><button id="tap"><img class="coin" src="coin.jpg" alt="DUTY Coin"></button><small>TAP TO EARN</small></section>
+<section class="energy"><div><b>⚡ ENERGY</b><strong><i id="energy">5000</i> / <i id="max">5000</i></strong></div><label><em id="energybar"></em></label></section>
+<nav>
+<button data-panel="daily">🎁<small>Daily</small></button>
+<button data-panel="friends">👥<small>Friends</small></button>
+<button data-panel="ranking">🏆<small>Ranking</small></button>
+<button data-panel="tasks">🎯<small>Tasks</small></button>
+</nav>
+<button class="wide" data-panel="boost">⚡ <span><b>BOOST</b><small>Upgrade your Tap Power</small></span> ›</button>
+<button class="wide" id="wallet">💳 <span><b>WALLET</b><small>Save your public TON address</small></span> ›</button>
+<div id="sheet"><button id="close">×</button><div id="content"></div></div>
+<div id="toast"></div>
+</main>
+<script src="app.js"></script>
+</body>
+</html>
