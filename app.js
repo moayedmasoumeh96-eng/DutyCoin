@@ -2,13 +2,21 @@ const tg=window.Telegram?.WebApp;
 if(tg){tg.ready();tg.expand();tg.setHeaderColor("#07090e");tg.setBackgroundColor("#07090e");}
 const API_URL=""; // If backend is on another domain, put its HTTPS URL here.
 const initData=tg?.initData||"";
-let S={balance:0,energy:5000,max_energy:5000,level:1,tap_power:1,referral_count:0,wallet:null};
+let S = JSON.parse(localStorage.getItem("duty_save")) || {
+  balance: 0,
+  energy: 5000,
+  max_energy: 5000,
+  level: 1,
+  tap_power: 1,
+  referral_count: 0,
+  wallet: null
+};
 const $=x=>document.getElementById(x);
 function render(){ $("balance").textContent=S.balance.toLocaleString();$("energy").textContent=S.energy.toLocaleString();$("max").textContent=S.max_energy.toLocaleString();$("level").textContent=S.level;$("power").textContent=S.tap_power;$("energybar").style.width=Math.max(0,Math.min(100,S.energy/S.max_energy*100))+"%";}
 function toast(t){$("toast").textContent=t;$("toast").classList.add("show");setTimeout(()=>$("toast").classList.remove("show"),1800)}
 async function load(){if(!initData){render();return}try{let r=await fetch(`${API_URL}/api/user`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({init_data:initData})});if(!r.ok)throw 0;S=await r.json();render()}catch(e){toast("Server connection failed")}}
 let q=0,timer;
-$("tap").onclick=()=>{if(S.energy<=0)return toast("⚡ No energy");S.energy--;S.balance+=S.tap_power;q++;render();clearTimeout(timer);timer=setTimeout(sync,180)}
+$("tap").onclick=()=>{if(S.energy<=0)return toast("⚡ No energy");S.energy--;S.balance+=S.tap_power;localStorage.setItem("duty_save", JSON.stringify(S));q++;render();clearTimeout(timer);timer=setTimeout(sync,180)}
 async function sync(){if(!q||!initData){q=0;return}let n=q;q=0;try{let r=await fetch(`${API_URL}/api/tap`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({init_data:initData,taps:n})});if(!r.ok)throw 0;let d=await r.json();S.balance=d.balance;S.energy=d.energy;render()}catch(e){toast("Tap sync failed");load()}}
 function open(html){$("content").innerHTML=html;$("sheet").classList.add("open")}
 $("close").onclick=()=>$("sheet").classList.remove("open");
