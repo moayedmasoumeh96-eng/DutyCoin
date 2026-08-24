@@ -12,9 +12,9 @@ WEBAPP_URL = os.getenv("WEBAPP_URL", "").strip()
 
 VALID = {"member", "administrator", "creator"}
 
-app = Flask(__name__)
+flask_app = Flask(__name__)
 
-@app.route("/api/boost", methods=["POST"])
+@flask_app.route("/api/boost", methods=["POST"])
 def api_boost():
     return jsonify({"ok": True})
 
