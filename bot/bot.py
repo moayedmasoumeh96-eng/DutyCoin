@@ -92,6 +92,10 @@ def run():
     app.add_handler(CallbackQueryHandler(check, pattern="^check_membership$"))
     app.add_handler(CallbackQueryHandler(no_url, pattern="^no_url$"))
     print("DUTY BOT RUNNING...")
+
+    import threading
+threading.Thread(target=lambda: flask_app.run(host="0.0.0.0", port=5000), daemon=True).start()
+    
     app.run_polling()
 
 if __name__ == "__main__":
