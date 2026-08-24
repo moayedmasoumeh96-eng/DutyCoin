@@ -12,6 +12,12 @@ WEBAPP_URL = os.getenv("WEBAPP_URL", "").strip()
 
 VALID = {"member", "administrator", "creator"}
 
+app = Flask(__name__)
+
+@app.route("/api/boost", methods=["POST"])
+def api_boost():
+    return jsonify({"ok": True})
+
 def main_menu():
     rows = [
         [InlineKeyboardButton("🎮 PLAY DUTY", web_app=WebAppInfo(url=WEBAPP_URL))]
