@@ -18,6 +18,12 @@ async function load(){if(!initData){render();return}try{let r=await fetch(`${API
 let q=0,timer;
 $("tap").onclick=()=>{if(S.energy<=0)return toast("⚡ No energy");S.energy--;S.balance+=S.tap_power;localStorage.setItem("duty_save", JSON.stringify(S));q++;render();clearTimeout(timer);timer=setTimeout(sync,180)}
 async function sync(){if(!q||!initData){q=0;return}let n=q;q=0;try{let r=await fetch(`${API_URL}/api/tap`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({init_data:initData,taps:n})});if(!r.ok)throw 0;let d=await r.json();S.balance=d.balance;S.energy=d.energy;render()}catch(e){toast("Tap sync failed");load()}}
+setInterval(() => {
+  if (S.energy < S.max_energy) {
+    S.energy++;
+    render();
+  }
+}, 1000);
 function open(html){$("content").innerHTML=html;$("sheet").classList.add("open")}
 $("close").onclick=()=>$("sheet").classList.remove("open");
 $("profile").onclick=()=>open(`<h2>👤 Profile</h2><p>Level ${S.level}<br>Balance: ${S.balance.toLocaleString()} DUTY<br>Energy: ${S.energy}/${S.max_energy}<br>Tap Power: +${S.tap_power}<br>Friends: ${S.referral_count}</p>`);
