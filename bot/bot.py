@@ -77,7 +77,11 @@ async def simple_command(update, context):
 
 async def no_url(update, context):
     await update.callback_query.answer("Set WEBAPP_URL to a public HTTPS Mini App URL first.", show_alert=True)
-
+    
+@app.route("/api/boost", methods=["POST"])
+def api_boost():
+    return {"ok": True, "message": "Boost endpoint is working"}
+    
 def run():
     if not BOT_TOKEN:
         raise RuntimeError("BOT_TOKEN missing in .env")
