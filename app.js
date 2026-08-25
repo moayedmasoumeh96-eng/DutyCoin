@@ -2,6 +2,7 @@ const tg=window.Telegram?.WebApp;
 if(tg){tg.ready();tg.expand();tg.setHeaderColor("#07090e");tg.setBackgroundColor("#07090e");}
 const API_URL=""; // If backend is on another domain, put its HTTPS URL here.
 const initData=tg?.initData||"";
+console.log("Telegram initData exists:", !!initData);
 let S = JSON.parse(localStorage.getItem("duty_save")) || {
   balance: 0,
   energy: 5000,
