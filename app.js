@@ -50,8 +50,8 @@ async function boost(){
     }
 
     if(d.ok){
-      if(typeof d.balance==="number")s.balance=d.balance;
-      if(typeof d.energy==="number")s.energy=d.energy;
+      if(typeof d.balance==="number")S.balance=d.balance;
+      if(typeof d.energy==="number")S.energy=d.energy;
       render();
       toast("+500 DUTY");
     }else{
