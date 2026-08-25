@@ -1,6 +1,7 @@
 import json, os
 from datetime import datetime, timedelta
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from sqlalchemy import select, desc
 from dotenv import load_dotenv
@@ -11,6 +12,20 @@ from .auth import validate_telegram_init_data
 load_dotenv()
 BOT_TOKEN = os.getenv("BOT_TOKEN", "")
 app = FastAPI(title="DUTY API")
+
+# The Mini App (browser/webview) and this API are almost always served from two
+# different origins (different domain in production, or e.g. localhost:8080 vs
+# localhost:8000 in local dev). Without CORS enabled, every fetch() call from
+# the frontend fails and looks like "server error" even though the backend is
+# healthy. Every write endpoint below already requires a valid, Telegram-signed
+# init_data, so a permissive origin list here does not weaken that check.
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.on_event("startup")
 async def startup():
